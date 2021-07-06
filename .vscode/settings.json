@@ -1,0 +1,12 @@
+{
+  "editor.tabSize": 2,
+  "javascript.format.enable": false,
+  "editor.formatOnType": true,
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "eslint.autoFixOnSave": true,
+  "eslint.semi": false,
+  "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+  }
+}
