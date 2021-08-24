@@ -2,7 +2,7 @@ import {useReducer} from 'react'
 import reducer from './reducer'
 
 function useStore() {
-  const [state, dispatch] = useReducer<React.Reducer<any, any>>(reducer, {})
+  const [state, dispatch] = useReducer(reducer, {})
 
   return [state, dispatch]
 }
