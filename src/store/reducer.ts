@@ -8,7 +8,9 @@ type Action = {
   payload: any
 }
 
-type State = {}
+type State = {
+  auth?: boolean
+}
 
 function reducer(state: State, action: Action): State {
   return state
