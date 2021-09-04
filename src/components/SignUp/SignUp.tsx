@@ -1,3 +1,4 @@
+import {FC} from 'react'
 import {useForm, FieldValues} from 'react-hook-form'
 import {
   Container,
@@ -5,9 +6,12 @@ import {
   FormControl,
   TextField,
   Button,
+  FormHelperText,
+  Typography,
 } from '@material-ui/core'
+import {Link} from 'react-router-dom'
 
-const Login = () => {
+const SignUp: FC = () => {
   const {
     register,
     handleSubmit,
@@ -20,7 +24,24 @@ const Login = () => {
     <Container>
       <Grid container justify="center">
         <Grid item alignItems="center" xs={6}>
+          <Typography variant="h3" component="h3" align="center" gutterBottom>
+            Sign up
+          </Typography>
           <form onSubmit={handleSubmit(onSubmit)}>
+            <FormControl margin="dense" fullWidth>
+              <TextField
+                required
+                label="Name"
+                variant="outlined"
+                error={!!errors?.name}
+                helperText={errors?.name?.message}
+                {...register('name', {
+                  required: true,
+                  minLength: {value: 30, message: 'error message'},
+                })}
+              />
+            </FormControl>
+
             <FormControl margin="dense" fullWidth>
               <TextField
                 required
@@ -50,9 +71,13 @@ const Login = () => {
               />
             </FormControl>
 
+            <FormHelperText id="component-helper-text">
+              Have account? <Link to="/sign-in">Sign-in</Link>
+            </FormHelperText>
+
             <FormControl margin="dense" fullWidth>
               <Button color="primary" variant="contained" type="submit">
-                Login
+                Sign up
               </Button>
             </FormControl>
           </form>
@@ -62,4 +87,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default SignUp
