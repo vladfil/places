@@ -2,7 +2,7 @@ import {FC} from 'react'
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom'
 import SignIn from 'components/SignIn/SignIn'
 import SignUp from 'components/SignUp/SignUp'
-import {Typography} from '@material-ui/core'
+import {Typography} from '@mui/material'
 declare module 'react-router-dom'
 
 export const Routes: FC = () => {

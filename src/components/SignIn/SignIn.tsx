@@ -8,7 +8,7 @@ import {
   Button,
   FormHelperText,
   Typography,
-} from '@material-ui/core'
+} from '@mui/material'
 import {Link} from 'react-router-dom'
 
 const Login: FC = () => {
@@ -22,7 +22,7 @@ const Login: FC = () => {
 
   return (
     <Container>
-      <Grid container justify="center">
+      <Grid container justifyContent="center">
         <Grid item alignItems="center" xs={6}>
           <Typography variant="h3" component="h3" align="center" gutterBottom>
             Login
