@@ -1,12 +1,12 @@
-import useStore from 'store'
+import {QueryClientProvider} from 'react-query'
+import {ReactQueryDevtools} from 'react-query/devtools'
+import {ThemeProvider, createTheme} from '@mui/material'
+
 import Context from 'store/context'
 import {Routes} from './components/Routes/Routes'
-import {QueryClient, QueryClientProvider} from 'react-query'
-import {ReactQueryDevtools} from 'react-query/devtools'
-import {ThemeProvider} from '@mui/material'
-import {createTheme, useTheme} from '@mui/material'
+import useStore from 'store'
+import {queryClient} from 'react-query/queryClient'
 
-const queryClient = new QueryClient()
 const theme = createTheme({
   palette: {
     primary: {
