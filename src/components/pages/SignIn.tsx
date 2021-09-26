@@ -14,10 +14,14 @@ import {Link} from 'react-router-dom'
 import axios from 'axios'
 import {Context} from 'store/context'
 import {ActionTypes} from 'store/reducer'
+import {setToken} from 'hooks/useToken'
 
-const fetchTodoList = async (data: FieldValues) => {
-  const response = await axios.post('/sign-in', {...data})
-  return response
+const fetchTodoList = async (data: FieldValues, dispatch: any) => {
+  const {data: respData} = await axios.post('/sign-in', {...data})
+  await dispatch({payload: respData.token, type: ActionTypes.UPDATE_TOKEN})
+  setToken(respData.token)
+
+  return respData.user
 }
 
 const Login: FC = () => {
@@ -33,13 +37,11 @@ const Login: FC = () => {
     control,
   })
 
-  const {isLoading, refetch, data} = useQuery(
-    'token',
-    () => fetchTodoList({...fields}),
+  const {isLoading, refetch} = useQuery(
+    'user',
+    () => fetchTodoList({...fields}, dispatch),
     {
       enabled: false,
-      staleTime: 0,
-      cacheTime: 0,
       onSuccess: () =>
         dispatch({
           payload: {
@@ -47,11 +49,6 @@ const Login: FC = () => {
             message: 'Account authorized',
             type: 'success',
           },
-          type: ActionTypes.UPDATE_TOAST,
-        }),
-      onError: () =>
-        dispatch({
-          payload: {isOpen: true, message: 'Login error', type: 'error'},
           type: ActionTypes.UPDATE_TOAST,
         }),
     },
@@ -64,7 +61,7 @@ const Login: FC = () => {
       <Grid container justifyContent="center">
         <Grid item alignItems="center" xs={6}>
           <Typography variant="h3" component="h3" align="center" gutterBottom>
-            Login
+            Sign In
           </Typography>
           <form onSubmit={handleSubmit(onSubmit)}>
             <FormControl margin="dense" fullWidth>

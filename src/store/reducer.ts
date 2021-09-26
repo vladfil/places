@@ -1,8 +1,7 @@
 export enum ActionTypes {
-  LOGIN = 'LOGIN',
-  LOGOUT = 'LOGOUT',
   UPDATE_ALL = 'UPDATE_ALL',
   UPDATE_TOAST = 'UPDATE_TOAST',
+  UPDATE_TOKEN = 'UPDATE_TOKEN',
 }
 
 export type Action = {
@@ -12,6 +11,7 @@ export type Action = {
 
 export type State = {
   auth?: boolean
+  token?: string
   toast?: {
     isOpen: boolean
     message?: string
@@ -22,10 +22,13 @@ export type State = {
 function reducer(state: State, {type, payload}: Action): State {
   switch (type) {
     case ActionTypes.UPDATE_ALL:
-      return {...payload}
+      return {...state, ...payload}
 
     case ActionTypes.UPDATE_TOAST:
       return {...state, toast: payload}
+
+    case ActionTypes.UPDATE_TOKEN:
+      return {...state, token: payload}
 
     default:
       return state

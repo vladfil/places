@@ -50,6 +50,7 @@ const TopBar: FC = () => {
           </Grid>
         </Grid>
       </AppBar>
+      <Grid sx={{minHeight: 64}} />
     </Box>
   )
 }

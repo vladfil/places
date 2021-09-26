@@ -4,7 +4,7 @@ export function queryErrorHandler(error: unknown): void {
   const title =
     error instanceof Error
       ? error.toString().replace(/^Error:\s*/, '')
-      : 'error connecting to server'
+      : 'Error connecting to server'
 
   alert(title)
 }
