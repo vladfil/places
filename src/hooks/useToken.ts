@@ -1,4 +1,5 @@
-export const setToken = token => window.localStorage.setItem('token', token)
+export const setToken = (token: string) =>
+  window.localStorage.setItem('token', token)
 
 export const deleteToken = () => window.localStorage.removeItem('token')
 

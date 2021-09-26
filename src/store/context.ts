@@ -1,5 +1,12 @@
 import {createContext} from 'react'
+import {State} from './reducer'
 
-const Context = createContext<any | null>(null)
+type ContextType = {
+  state: State
+  dispatch: any
+}
 
-export default Context
+export const Context = createContext<ContextType>({
+  state: {},
+  dispatch: () => {},
+})

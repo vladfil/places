@@ -1,4 +1,4 @@
-import {FC} from 'react'
+import {FC, useContext} from 'react'
 import {useForm, FieldValues} from 'react-hook-form'
 import {useMutation} from 'react-query'
 import {
@@ -14,12 +14,15 @@ import {
 } from '@mui/material'
 import {Link} from 'react-router-dom'
 import axios, {AxiosResponse} from 'axios'
+import {Context} from 'store/context'
+import {ActionTypes} from 'store/reducer'
 
 type Obj = {
   [x: string]: any
 }
 
 const SignUp: FC = () => {
+  const {dispatch} = useContext(Context)
   const {
     register,
     handleSubmit,
@@ -28,6 +31,13 @@ const SignUp: FC = () => {
 
   const mutation = useMutation<AxiosResponse<any>, Obj, FieldValues, Obj>(
     newUser => axios.post('/sign-up', newUser),
+    {
+      onSuccess: () =>
+        dispatch({
+          payload: {isOpen: true, message: 'User created!'},
+          type: ActionTypes.UPDATE_TOAST,
+        }),
+    },
   )
 
   const onSubmit = (newUser: FieldValues) => {
@@ -38,7 +48,6 @@ const SignUp: FC = () => {
   if (mutation?.error && typeof mutation.error === 'object') {
     if (mutation.error.response) {
       errorMessage = mutation.error.response.data
-      // console.log(mutation.error.response)
     }
   }
 
@@ -72,8 +81,8 @@ const SignUp: FC = () => {
                 {...register('name', {
                   required: true,
                   minLength: {
-                    value: 6,
-                    message: 'Minimal Name length is 6 characters',
+                    value: 4,
+                    message: 'Minimal Name length is 4 characters',
                   },
                 })}
               />

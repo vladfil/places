@@ -2,7 +2,7 @@ import {QueryClientProvider} from 'react-query'
 import {ReactQueryDevtools} from 'react-query/devtools'
 import {ThemeProvider, createTheme} from '@mui/material'
 
-import Context from 'store/context'
+import {Context} from 'store/context'
 import {Routes} from './components/Routes/Routes'
 import useStore from 'store'
 import {queryClient} from 'react-query/queryClient'
@@ -22,7 +22,7 @@ function App() {
   const [state, dispatch] = useStore()
 
   return (
-    <Context.Provider value={[state, dispatch]}>
+    <Context.Provider value={{state, dispatch}}>
       <ThemeProvider theme={theme}>
         <QueryClientProvider client={queryClient}>
           <Routes />

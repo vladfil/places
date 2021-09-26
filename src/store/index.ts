@@ -1,7 +1,8 @@
 import {useReducer} from 'react'
-import reducer from './reducer'
+import reducer, {State} from './reducer'
 
-function useStore() {
+// @TODO - add type for dispatch
+function useStore(): [State, any] {
   const [state, dispatch] = useReducer(reducer, {})
 
   return [state, dispatch]

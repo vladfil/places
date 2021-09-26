@@ -1,24 +1,63 @@
-import {FC} from 'react'
-import {useForm, FieldValues} from 'react-hook-form'
+import {FC, useContext} from 'react'
+import {useQuery} from 'react-query'
+import {useForm, FieldValues, useWatch} from 'react-hook-form'
 import {
   Container,
   Grid,
   FormControl,
   TextField,
-  Button,
   FormHelperText,
   Typography,
 } from '@mui/material'
+import {LoadingButton} from '@mui/lab'
 import {Link} from 'react-router-dom'
+import axios from 'axios'
+import {Context} from 'store/context'
+import {ActionTypes} from 'store/reducer'
+
+const fetchTodoList = async (data: FieldValues) => {
+  const response = await axios.post('/sign-in', {...data})
+  return response
+}
 
 const Login: FC = () => {
+  const {dispatch} = useContext(Context)
   const {
     register,
     handleSubmit,
     formState: {errors},
+    control,
   } = useForm()
 
-  const onSubmit = (data: FieldValues) => console.log(data)
+  const fields = useWatch({
+    control,
+  })
+
+  const {isLoading, refetch, data} = useQuery(
+    'token',
+    () => fetchTodoList({...fields}),
+    {
+      enabled: false,
+      staleTime: 0,
+      cacheTime: 0,
+      onSuccess: () =>
+        dispatch({
+          payload: {
+            isOpen: true,
+            message: 'Account authorized',
+            type: 'success',
+          },
+          type: ActionTypes.UPDATE_TOAST,
+        }),
+      onError: () =>
+        dispatch({
+          payload: {isOpen: true, message: 'Login error', type: 'error'},
+          type: ActionTypes.UPDATE_TOAST,
+        }),
+    },
+  )
+
+  const onSubmit = () => refetch()
 
   return (
     <Container>
@@ -37,7 +76,10 @@ const Login: FC = () => {
                 helperText={errors?.email?.message}
                 {...register('email', {
                   required: true,
-                  minLength: {value: 30, message: 'error message'},
+                  minLength: {
+                    value: 6,
+                    message: 'Minimal Name length is 6 characters',
+                  },
                 })}
               />
             </FormControl>
@@ -52,7 +94,10 @@ const Login: FC = () => {
                 type="password"
                 {...register('password', {
                   required: true,
-                  minLength: {value: 30, message: 'error message'},
+                  minLength: {
+                    value: 6,
+                    message: 'Minimal Name length is 6 characters',
+                  },
                 })}
               />
             </FormControl>
@@ -62,9 +107,14 @@ const Login: FC = () => {
             </FormHelperText>
 
             <FormControl margin="dense" fullWidth>
-              <Button color="primary" variant="contained" type="submit">
+              <LoadingButton
+                loading={isLoading}
+                color="primary"
+                variant="contained"
+                type="submit"
+              >
                 Login
-              </Button>
+              </LoadingButton>
             </FormControl>
           </form>
         </Grid>
