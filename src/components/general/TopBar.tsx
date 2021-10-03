@@ -14,21 +14,18 @@ import {
   ListItemIcon,
   Grid,
 } from '@mui/material'
-import {PersonAdd, Logout} from '@mui/icons-material'
+import {PersonAdd, Logout, TextSnippet} from '@mui/icons-material'
 import {Link} from 'react-router-dom'
+import {ActionTypes} from 'utils/types'
 
 const TopBar: FC = () => {
-  const {state} = useAppContext()
-  const {auth} = state
+  const {state, dispatch} = useAppContext()
+  const {auth, user} = state
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
   // @TODO add TS event React.MouseEventHandler<MouseEvent> for event arg
-  const handleClick = (event: any) => {
-    setAnchorEl(event.currentTarget)
-  }
-  const handleClose = () => {
-    setAnchorEl(null)
-  }
+  const handleClick = (event: any) => setAnchorEl(event.currentTarget)
+  const handleClose = () => setAnchorEl(null)
 
   return (
     <Box sx={{flexGrow: 1}}>
@@ -48,10 +45,12 @@ const TopBar: FC = () => {
               justifyContent: 'flex-end',
             }}
           >
-            {auth ? (
+            {auth && user ? (
               <>
                 <IconButton onClick={handleClick} size="small" sx={{ml: 2}}>
-                  <Avatar sx={{width: 32, height: 32}}>M</Avatar>
+                  <Avatar sx={{width: 32, height: 32}}>
+                    {user.name.charAt(0)}
+                  </Avatar>
                 </IconButton>
                 <Menu
                   anchorEl={anchorEl}
@@ -91,16 +90,29 @@ const TopBar: FC = () => {
                     <Avatar />
                     <ListItemText primary="Profile" />
                   </MenuItem>
+                  <MenuItem component={Link} to="/my-posts">
+                    <ListItemIcon>
+                      <TextSnippet />
+                    </ListItemIcon>
+                    <ListItemText primary="My Posts" />
+                  </MenuItem>
                   <Divider />
                   <MenuItem component={Link} to="/new-post">
                     <ListItemIcon>
-                      <PersonAdd fontSize="small" />
+                      <PersonAdd />
                     </ListItemIcon>
                     <ListItemText primary="Add post" />
                   </MenuItem>
-                  <MenuItem component={Link} to="/logout">
+                  <MenuItem
+                    onClick={() => {
+                      dispatch({
+                        type: ActionTypes.LOG_OUT,
+                        payload: {auth: false},
+                      })
+                    }}
+                  >
                     <ListItemIcon>
-                      <Logout fontSize="small" />
+                      <Logout />
                     </ListItemIcon>
                     <ListItemText primary="Logout" />
                   </MenuItem>

@@ -18,8 +18,8 @@ import {setLocalStorage} from 'utils/localStorage'
 
 const fetchTodoList = async (data: FieldValues, dispatch: any) => {
   const {data: respData} = await axios.post('/sign-in', {...data})
-  await dispatch({payload: respData.token, type: ActionTypes.UPDATE_ALL})
   setLocalStorage('token', respData.token)
+  setLocalStorage('user', respData.user)
 
   return respData
 }
@@ -43,10 +43,10 @@ const Login: FC = () => {
     {
       enabled: false,
       onSuccess: (data: LogInResponse) => {
-        console.log(data)
-
         dispatch({
           payload: {
+            token: data.token,
+            user: data.user,
             auth: true,
             toast: {
               isOpen: true,

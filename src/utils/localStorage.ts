@@ -9,14 +9,14 @@ export const setLocalStorage = (key: string, value: any) => {
 export const getLocalStorage = (key: string) => {
   const value: string | null = window.localStorage.getItem(key)
 
-  if (!value) return
+  if (!value) return null
 
   try {
     return JSON.parse(value)
-  } catch (error) {
+  } catch {
     return value
   }
 }
 
 export const deleteLocalStorage = (key: string) =>
-  window.localStorage.getItem(key)
+  window.localStorage.removeItem(key)

@@ -36,6 +36,7 @@ const SignUp: FC = () => {
     onSuccess: ({data}) => {
       const {token, user} = data
       setLocalStorage('token', token)
+      setLocalStorage('user', user)
       clientQuery.setQueryData('user', user)
 
       dispatch({

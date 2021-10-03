@@ -22,6 +22,15 @@ export type LogInResponse = {
 }
 
 // Context types
+export interface State {
+  auth: boolean
+  token?: string
+  user?: User
+  toast?: Toast
+}
+
+export type Dispatch = (a: Action) => void
+
 export type ContextType = {
   state: State
   dispatch: Dispatch
@@ -34,26 +43,12 @@ export interface Payload {
   toast?: Toast
 }
 
-type StoreAction = {
-  payload: Payload
-  type: ActionTypes
-}
-
-export type Dispatch = (a: StoreAction) => void
-
-// Reducer types
 export enum ActionTypes {
   UPDATE_ALL = 'UPDATE_ALL',
+  LOG_OUT = 'LOG_OUT',
 }
 
 export type Action = {
+  payload?: Payload
   type: ActionTypes
-  payload: any
-}
-
-export interface State {
-  auth: boolean
-  token?: string
-  user?: User
-  toast?: Toast
 }

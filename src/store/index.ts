@@ -1,11 +1,22 @@
 import {useReducer} from 'react'
 import reducer from './reducer'
-import {State, Dispatch} from 'utils/types'
+import {State, Dispatch, User} from 'utils/types'
+import {getLocalStorage} from 'utils/localStorage'
 
 function useStore(): [State, Dispatch] {
-  const [state, dispatch] = useReducer(reducer, {auth: false})
+  const state: State = {auth: false}
+  const user: User = getLocalStorage('user')
+  const token: string = getLocalStorage('token')
 
-  return [state, dispatch]
+  if (user && token) {
+    state.user = user
+    state.token = token
+    state.auth = true
+  }
+
+  const [st, dispatch] = useReducer(reducer, state)
+
+  return [st, dispatch]
 }
 
 export default useStore
