@@ -1,16 +1,15 @@
 import {Snackbar, Alert} from '@mui/material'
-import {useContext} from 'react'
-import {Context} from 'store/context'
+import {useAppContext} from 'store/context'
 import {ActionTypes} from 'store/reducer'
 
 const Toast = () => {
-  const {state, dispatch} = useContext(Context)
+  const {state, dispatch} = useAppContext()
   const toast = state && state.toast
 
   const handleClose = () => {
     dispatch({
-      payload: null,
-      type: ActionTypes.UPDATE_TOAST,
+      payload: {toast: {isOpen: false}},
+      type: ActionTypes.UPDATE_ALL,
     })
   }
 

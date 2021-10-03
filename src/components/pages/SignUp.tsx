@@ -1,4 +1,4 @@
-import {FC, useContext} from 'react'
+import {FC} from 'react'
 import {useForm, FieldValues} from 'react-hook-form'
 import {useMutation, useQueryClient} from 'react-query'
 import {
@@ -14,7 +14,7 @@ import {
 } from '@mui/material'
 import {Link} from 'react-router-dom'
 import axios, {AxiosResponse} from 'axios'
-import {Context} from 'store/context'
+import {useAppContext} from 'store/context'
 import {ActionTypes} from 'store/reducer'
 import {setToken} from 'hooks/useToken'
 
@@ -23,7 +23,7 @@ type Obj = {
 }
 
 const SignUp: FC = () => {
-  const {dispatch} = useContext(Context)
+  const {dispatch} = useAppContext()
   const clientQuery = useQueryClient()
   const {
     register,
@@ -39,10 +39,12 @@ const SignUp: FC = () => {
         setToken(token)
         clientQuery.setQueryData('user', user)
 
-        dispatch({payload: token, type: ActionTypes.UPDATE_TOKEN})
         dispatch({
-          payload: {isOpen: true, message: 'Account created', type: 'success'},
-          type: ActionTypes.UPDATE_TOAST,
+          payload: {
+            token,
+            toast: {isOpen: true, message: 'Account created', type: 'success'},
+          },
+          type: ActionTypes.UPDATE_ALL,
         })
       },
     },

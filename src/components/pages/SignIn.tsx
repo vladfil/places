@@ -1,4 +1,4 @@
-import {FC, useContext} from 'react'
+import {FC} from 'react'
 import {useQuery} from 'react-query'
 import {useForm, FieldValues, useWatch} from 'react-hook-form'
 import {
@@ -12,20 +12,20 @@ import {
 import {LoadingButton} from '@mui/lab'
 import {Link} from 'react-router-dom'
 import axios from 'axios'
-import {Context} from 'store/context'
+import {useAppContext} from 'store/context'
 import {ActionTypes} from 'store/reducer'
 import {setToken} from 'hooks/useToken'
 
 const fetchTodoList = async (data: FieldValues, dispatch: any) => {
   const {data: respData} = await axios.post('/sign-in', {...data})
-  await dispatch({payload: respData.token, type: ActionTypes.UPDATE_TOKEN})
+  await dispatch({payload: respData.token, type: ActionTypes.UPDATE_ALL})
   setToken(respData.token)
 
   return respData.user
 }
 
 const Login: FC = () => {
-  const {dispatch} = useContext(Context)
+  const {dispatch} = useAppContext()
   const {
     register,
     handleSubmit,
@@ -42,15 +42,20 @@ const Login: FC = () => {
     () => fetchTodoList({...fields}, dispatch),
     {
       enabled: false,
-      onSuccess: () =>
+      onSuccess: data => {
+        console.log(data)
+
         dispatch({
           payload: {
-            isOpen: true,
-            message: 'Account authorized',
-            type: 'success',
+            toast: {
+              isOpen: true,
+              message: 'Account authorized',
+              type: 'success',
+            },
           },
-          type: ActionTypes.UPDATE_TOAST,
-        }),
+          type: ActionTypes.UPDATE_ALL,
+        })
+      },
     },
   )
 

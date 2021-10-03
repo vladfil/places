@@ -1,12 +1,18 @@
-import {createContext} from 'react'
+import {createContext, useContext} from 'react'
 import {State} from './reducer'
+import {Dispatch} from './'
 
 type ContextType = {
   state: State
-  dispatch: any
+  dispatch: Dispatch
 }
 
 export const Context = createContext<ContextType>({
-  state: {},
+  state: {auth: false},
   dispatch: () => {},
 })
+
+export const useAppContext = () => {
+  const {state, dispatch} = useContext(Context)
+  return {state, dispatch}
+}
