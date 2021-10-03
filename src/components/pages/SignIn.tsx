@@ -14,12 +14,12 @@ import {Link} from 'react-router-dom'
 import axios from 'axios'
 import {useAppContext} from 'store/context'
 import {ActionTypes} from 'store/reducer'
-import {setToken} from 'hooks/useToken'
+import {setLocalStorage} from 'localStorage'
 
 const fetchTodoList = async (data: FieldValues, dispatch: any) => {
   const {data: respData} = await axios.post('/sign-in', {...data})
   await dispatch({payload: respData.token, type: ActionTypes.UPDATE_ALL})
-  setToken(respData.token)
+  setLocalStorage('token', respData.token)
 
   return respData.user
 }
@@ -43,10 +43,9 @@ const Login: FC = () => {
     {
       enabled: false,
       onSuccess: data => {
-        console.log(data)
-
         dispatch({
           payload: {
+            auth: true,
             toast: {
               isOpen: true,
               message: 'Account authorized',

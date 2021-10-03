@@ -16,7 +16,7 @@ import {Link} from 'react-router-dom'
 import axios, {AxiosResponse} from 'axios'
 import {useAppContext} from 'store/context'
 import {ActionTypes} from 'store/reducer'
-import {setToken} from 'hooks/useToken'
+import {setLocalStorage} from 'localStorage'
 
 type Obj = {
   [x: string]: any
@@ -36,11 +36,12 @@ const SignUp: FC = () => {
     {
       onSuccess: ({data}) => {
         const {token, user} = data
-        setToken(token)
+        setLocalStorage('token', token)
         clientQuery.setQueryData('user', user)
 
         dispatch({
           payload: {
+            auth: true,
             token,
             toast: {isOpen: true, message: 'Account created', type: 'success'},
           },
