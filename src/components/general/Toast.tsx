@@ -1,6 +1,6 @@
 import {Snackbar, Alert} from '@mui/material'
 import {useAppContext} from 'store/context'
-import {ActionTypes} from 'store/reducer'
+import {ActionTypes} from 'utils/types'
 
 const Toast = () => {
   const {state, dispatch} = useAppContext()

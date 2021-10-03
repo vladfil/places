@@ -15,12 +15,8 @@ import {
 import {Link} from 'react-router-dom'
 import axios, {AxiosResponse} from 'axios'
 import {useAppContext} from 'store/context'
-import {ActionTypes} from 'store/reducer'
-import {setLocalStorage} from 'localStorage'
-
-type Obj = {
-  [x: string]: any
-}
+import {ActionTypes, LogInResponse, Obj} from 'utils/types'
+import {setLocalStorage} from 'utils/localStorage'
 
 const SignUp: FC = () => {
   const {dispatch} = useAppContext()
@@ -31,25 +27,27 @@ const SignUp: FC = () => {
     formState: {errors},
   } = useForm()
 
-  const mutation = useMutation<AxiosResponse<any>, Obj, FieldValues, Obj>(
-    newUser => axios.post('/sign-up', newUser),
-    {
-      onSuccess: ({data}) => {
-        const {token, user} = data
-        setLocalStorage('token', token)
-        clientQuery.setQueryData('user', user)
+  const mutation = useMutation<
+    AxiosResponse<LogInResponse>,
+    Obj,
+    FieldValues,
+    Obj
+  >(newUser => axios.post<LogInResponse>('/sign-up', newUser), {
+    onSuccess: ({data}) => {
+      const {token, user} = data
+      setLocalStorage('token', token)
+      clientQuery.setQueryData('user', user)
 
-        dispatch({
-          payload: {
-            auth: true,
-            token,
-            toast: {isOpen: true, message: 'Account created', type: 'success'},
-          },
-          type: ActionTypes.UPDATE_ALL,
-        })
-      },
+      dispatch({
+        payload: {
+          auth: true,
+          token,
+          toast: {isOpen: true, message: 'Account created', type: 'success'},
+        },
+        type: ActionTypes.UPDATE_ALL,
+      })
     },
-  )
+  })
 
   const onSubmit = (newUser: FieldValues) => {
     mutation.mutate(newUser)

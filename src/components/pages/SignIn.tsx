@@ -13,15 +13,15 @@ import {LoadingButton} from '@mui/lab'
 import {Link} from 'react-router-dom'
 import axios from 'axios'
 import {useAppContext} from 'store/context'
-import {ActionTypes} from 'store/reducer'
-import {setLocalStorage} from 'localStorage'
+import {ActionTypes, LogInResponse} from 'utils/types'
+import {setLocalStorage} from 'utils/localStorage'
 
 const fetchTodoList = async (data: FieldValues, dispatch: any) => {
   const {data: respData} = await axios.post('/sign-in', {...data})
   await dispatch({payload: respData.token, type: ActionTypes.UPDATE_ALL})
   setLocalStorage('token', respData.token)
 
-  return respData.user
+  return respData
 }
 
 const Login: FC = () => {
@@ -42,7 +42,9 @@ const Login: FC = () => {
     () => fetchTodoList({...fields}, dispatch),
     {
       enabled: false,
-      onSuccess: data => {
+      onSuccess: (data: LogInResponse) => {
+        console.log(data)
+
         dispatch({
           payload: {
             auth: true,
