@@ -4,10 +4,10 @@ export type Obj = {
 }
 
 export type User = {
-  date: string
-  email: string
-  name: string
-  _id: string
+  user_registered: string
+  user_email: string
+  display_name: string
+  ID: number
 }
 
 export type Toast = {
@@ -16,9 +16,16 @@ export type Toast = {
   type?: 'info' | 'warning' | 'success' | 'error'
 }
 
-export type LogInResponse = {
+export interface UserResponse {
   user: User
   token: string
+  status: number
+}
+
+export interface Response<T> {
+  code: string
+  message: string
+  data: T
 }
 
 // Context types

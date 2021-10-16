@@ -13,11 +13,11 @@ import {LoadingButton} from '@mui/lab'
 import {Link} from 'react-router-dom'
 import axios from 'axios'
 import {useAppContext} from 'store/context'
-import {ActionTypes, LogInResponse} from 'utils/types'
+import {ActionTypes, Response, UserResponse} from 'utils/types'
 import {setLocalStorage} from 'utils/localStorage'
 
 const fetchTodoList = async (data: FieldValues, dispatch: any) => {
-  const {data: respData} = await axios.post('/sign-in', {...data})
+  const {data: respData} = await axios.post('/user/login', {...data})
   setLocalStorage('token', respData.token)
   setLocalStorage('user', respData.user)
 
@@ -42,11 +42,11 @@ const Login: FC = () => {
     () => fetchTodoList({...fields}, dispatch),
     {
       enabled: false,
-      onSuccess: (data: LogInResponse) => {
+      onSuccess: (data: Response<UserResponse>) => {
         dispatch({
           payload: {
-            token: data.token,
-            user: data.user,
+            token: data.data.token,
+            user: data.data.user,
             auth: true,
             toast: {
               isOpen: true,
@@ -77,11 +77,11 @@ const Login: FC = () => {
                 variant="outlined"
                 error={!!errors?.email}
                 helperText={errors?.email?.message}
-                {...register('email', {
+                {...register('username', {
                   required: true,
                   minLength: {
-                    value: 6,
-                    message: 'Minimal Name length is 6 characters',
+                    value: 5,
+                    message: 'Minimal Name length is 5 characters',
                   },
                 })}
               />

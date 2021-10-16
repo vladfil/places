@@ -49,7 +49,7 @@ const TopBar: FC = () => {
               <>
                 <IconButton onClick={handleClick} size="small" sx={{ml: 2}}>
                   <Avatar sx={{width: 32, height: 32}}>
-                    {user.name.charAt(0)}
+                    {user.display_name.charAt(0)}
                   </Avatar>
                 </IconButton>
                 <Menu
@@ -107,7 +107,6 @@ const TopBar: FC = () => {
                     onClick={() => {
                       dispatch({
                         type: ActionTypes.LOG_OUT,
-                        payload: {auth: false},
                       })
                     }}
                   >

@@ -15,7 +15,7 @@ import {
 import {Link} from 'react-router-dom'
 import axios, {AxiosResponse} from 'axios'
 import {useAppContext} from 'store/context'
-import {ActionTypes, LogInResponse, Obj} from 'utils/types'
+import {ActionTypes, Response, UserResponse, Obj} from 'utils/types'
 import {setLocalStorage} from 'utils/localStorage'
 
 const SignUp: FC = () => {
@@ -28,13 +28,14 @@ const SignUp: FC = () => {
   } = useForm()
 
   const mutation = useMutation<
-    AxiosResponse<LogInResponse>,
+    AxiosResponse<Response<UserResponse>>,
     Obj,
     FieldValues,
     Obj
-  >(newUser => axios.post<LogInResponse>('/sign-up', newUser), {
+  >(newUser => axios.post<Response<UserResponse>>('/user', newUser), {
     onSuccess: ({data}) => {
-      const {token, user} = data
+      const {token, user} = data.data
+
       setLocalStorage('token', token)
       setLocalStorage('user', user)
       clientQuery.setQueryData('user', user)
@@ -88,7 +89,7 @@ const SignUp: FC = () => {
                 variant="outlined"
                 error={!!errors?.name}
                 helperText={errors?.name?.message}
-                {...register('name', {
+                {...register('username', {
                   required: true,
                   minLength: {
                     value: 4,
