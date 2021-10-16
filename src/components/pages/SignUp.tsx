@@ -12,9 +12,9 @@ import {
   CircularProgress,
 } from '@mui/material'
 import {Link} from 'react-router-dom'
-import axios, {AxiosResponse} from 'axios'
+import axios, {AxiosError, AxiosResponse} from 'axios'
 import {useAppContext} from 'store/context'
-import {ActionTypes, Response, UserResponse, Obj} from 'utils/types'
+import {ActionTypes, Response, UserResponse, Obj, Toast} from 'utils/types'
 import {setLocalStorage} from 'utils/localStorage'
 
 const SignUp: FC = () => {
@@ -28,7 +28,7 @@ const SignUp: FC = () => {
 
   const mutation = useMutation<
     AxiosResponse<Response<UserResponse>>,
-    Error,
+    Error | AxiosError,
     FieldValues,
     Obj
   >(newUser => axios.post<Response<UserResponse>>('/user', newUser), {
@@ -48,10 +48,17 @@ const SignUp: FC = () => {
         type: ActionTypes.UPDATE_ALL,
       })
     },
-    onError: (data: Error) => {
+    onError: (error: Error | AxiosError) => {
+      const toast: Toast = {isOpen: true, message: '', type: 'error'}
+      if (axios.isAxiosError(error) && error?.response?.data?.message) {
+        toast.message = error.response.data.message
+      } else {
+        toast.message = error.message
+      }
+
       dispatch({
         payload: {
-          toast: {isOpen: true, message: data.message, type: 'error'},
+          toast,
         },
         type: ActionTypes.UPDATE_ALL,
       })

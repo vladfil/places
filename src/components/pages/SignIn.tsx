@@ -11,9 +11,9 @@ import {
 } from '@mui/material'
 import {LoadingButton} from '@mui/lab'
 import {Link} from 'react-router-dom'
-import axios from 'axios'
+import axios, {AxiosError} from 'axios'
 import {useAppContext} from 'store/context'
-import {ActionTypes, Response, UserResponse} from 'utils/types'
+import {ActionTypes, Response, Toast, UserResponse} from 'utils/types'
 import {setLocalStorage} from 'utils/localStorage'
 
 const fetchTodoList = async (data: FieldValues, dispatch: any) => {
@@ -60,10 +60,17 @@ const Login: FC = () => {
           type: ActionTypes.UPDATE_ALL,
         })
       },
-      onError: (data: Error) => {
+      onError: (error: Error | AxiosError) => {
+        const toast: Toast = {isOpen: true, message: '', type: 'error'}
+        if (axios.isAxiosError(error) && error?.response?.data?.message) {
+          toast.message = error.response.data.message
+        } else {
+          toast.message = error.message
+        }
+
         dispatch({
           payload: {
-            toast: {isOpen: true, message: data.message, type: 'error'},
+            toast,
           },
           type: ActionTypes.UPDATE_ALL,
         })
