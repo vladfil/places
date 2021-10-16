@@ -28,7 +28,7 @@ const SignUp: FC = () => {
 
   const mutation = useMutation<
     AxiosResponse<Response<UserResponse>>,
-    Error | AxiosError,
+    Error | AxiosError<Response<UserResponse>>,
     FieldValues,
     Obj
   >(newUser => axios.post<Response<UserResponse>>('/user', newUser), {
@@ -48,9 +48,9 @@ const SignUp: FC = () => {
         type: ActionTypes.UPDATE_ALL,
       })
     },
-    onError: (error: Error | AxiosError) => {
+    onError: (error: Error | AxiosError<Response<UserResponse>>) => {
       const toast: Toast = {isOpen: true, message: '', type: 'error'}
-      if (axios.isAxiosError(error) && error?.response?.data?.message) {
+      if (axios.isAxiosError(error) && error?.response) {
         toast.message = error.response.data.message
       } else {
         toast.message = error.message

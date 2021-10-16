@@ -22,7 +22,7 @@ export interface UserResponse {
   status: number
 }
 
-export interface Response<T> {
+export interface Response<T = any> {
   code: string
   message: string
   data: T
