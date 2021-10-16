@@ -17,9 +17,12 @@ import {ActionTypes, Response, UserResponse} from 'utils/types'
 import {setLocalStorage} from 'utils/localStorage'
 
 const fetchTodoList = async (data: FieldValues, dispatch: any) => {
-  const {data: respData} = await axios.post('/user/login', {...data})
-  setLocalStorage('token', respData.token)
-  setLocalStorage('user', respData.user)
+  const {data: respData} = await axios.post<Response<UserResponse>>(
+    '/user/login',
+    {...data},
+  )
+  setLocalStorage('token', respData.data.token)
+  setLocalStorage('user', respData.data.user)
 
   return respData
 }
@@ -53,6 +56,14 @@ const Login: FC = () => {
               message: 'Account authorized',
               type: 'success',
             },
+          },
+          type: ActionTypes.UPDATE_ALL,
+        })
+      },
+      onError: (data: Error) => {
+        dispatch({
+          payload: {
+            toast: {isOpen: true, message: data.message, type: 'error'},
           },
           type: ActionTypes.UPDATE_ALL,
         })

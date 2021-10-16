@@ -2,7 +2,6 @@ import {FC} from 'react'
 import {useForm, FieldValues} from 'react-hook-form'
 import {useMutation, useQueryClient} from 'react-query'
 import {
-  Alert,
   Container,
   Grid,
   FormControl,
@@ -29,7 +28,7 @@ const SignUp: FC = () => {
 
   const mutation = useMutation<
     AxiosResponse<Response<UserResponse>>,
-    Obj,
+    Error,
     FieldValues,
     Obj
   >(newUser => axios.post<Response<UserResponse>>('/user', newUser), {
@@ -49,17 +48,18 @@ const SignUp: FC = () => {
         type: ActionTypes.UPDATE_ALL,
       })
     },
+    onError: (data: Error) => {
+      dispatch({
+        payload: {
+          toast: {isOpen: true, message: data.message, type: 'error'},
+        },
+        type: ActionTypes.UPDATE_ALL,
+      })
+    },
   })
 
   const onSubmit = (newUser: FieldValues) => {
     mutation.mutate(newUser)
-  }
-
-  let errorMessage: string = ''
-  if (mutation?.error && typeof mutation.error === 'object') {
-    if (mutation.error.response) {
-      errorMessage = mutation.error.response.data
-    }
   }
 
   return (
@@ -74,12 +74,6 @@ const SignUp: FC = () => {
               </span>
             ) : null}
           </Typography>
-
-          {mutation.isError ? (
-            <Alert onClick={() => mutation.reset()} severity="error">
-              {errorMessage}
-            </Alert>
-          ) : null}
 
           <form onSubmit={handleSubmit(onSubmit)}>
             <FormControl margin="dense" fullWidth>
