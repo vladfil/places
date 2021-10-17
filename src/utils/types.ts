@@ -22,6 +22,24 @@ export interface UserResponse {
   status: number
 }
 
+export interface WpQueryResponse {
+  wp_query: {
+    max_num_pages: number
+    posts: Post[]
+  }
+}
+
+export type Post = {
+  ID: number
+  post_author: number
+  post_date: Date
+  post_content: string
+  post_title: string
+  post_excerpt: string
+  post_type: 'publish' | 'draft'
+  post_name: string
+}
+
 export interface Response<T = any> {
   code: string
   message: string

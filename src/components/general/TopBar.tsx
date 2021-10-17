@@ -47,9 +47,19 @@ const TopBar: FC = () => {
           >
             {auth && user ? (
               <>
+                <Toolbar sx={{marginLeft: 'auto'}}>
+                  <ListItem
+                    sx={{width: 'auto'}}
+                    button
+                    component={Link}
+                    to="/posts"
+                  >
+                    <ListItemText primary="Posts" />
+                  </ListItem>
+                </Toolbar>
                 <IconButton onClick={handleClick} size="small" sx={{ml: 2}}>
                   <Avatar sx={{width: 32, height: 32}}>
-                    {user.display_name.charAt(0)}
+                    {user.display_name.charAt(0).toUpperCase()}
                   </Avatar>
                 </IconButton>
                 <Menu
@@ -120,6 +130,14 @@ const TopBar: FC = () => {
             ) : (
               <>
                 <Toolbar sx={{marginLeft: 'auto'}}>
+                  <ListItem
+                    sx={{width: 'auto'}}
+                    button
+                    component={Link}
+                    to="/posts"
+                  >
+                    <ListItemText primary="Posts" />
+                  </ListItem>
                   <ListItem
                     sx={{width: 'auto'}}
                     button

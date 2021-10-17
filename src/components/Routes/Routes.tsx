@@ -6,6 +6,7 @@ import {Typography} from '@mui/material'
 import Home from 'components/pages/Home'
 import SignIn from 'components/pages/SignIn'
 import SignUp from 'components/pages/SignUp'
+import Posts from 'components/pages/Posts'
 import Profile from 'components/pages/Profile'
 import MyPosts from 'components/pages/MyPosts'
 import NewPost from 'components/pages/NewPost'
@@ -28,6 +29,9 @@ export const Routes: FC = () => {
           </PublicRoute>
           <PublicRoute auth={state.auth} exact path="/sign-up">
             <SignUp />
+          </PublicRoute>
+          <PublicRoute auth={state.auth} exact path="/posts">
+            <Posts />
           </PublicRoute>
           <PrivateRoute auth={state.auth} exact path="/profile">
             <Profile />

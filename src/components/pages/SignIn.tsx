@@ -16,7 +16,7 @@ import {useAppContext} from 'store/context'
 import {ActionTypes, Response, Toast, UserResponse} from 'utils/types'
 import {setLocalStorage} from 'utils/localStorage'
 
-const fetchTodoList = async (data: FieldValues, dispatch: any) => {
+const fetchUser = async (data: FieldValues) => {
   const {data: respData} = await axios.post<Response<UserResponse>>(
     '/user/login',
     {...data},
@@ -40,43 +40,39 @@ const Login: FC = () => {
     control,
   })
 
-  const {isLoading, refetch} = useQuery(
-    'user',
-    () => fetchTodoList({...fields}, dispatch),
-    {
-      enabled: false,
-      onSuccess: (data: Response<UserResponse>) => {
-        dispatch({
-          payload: {
-            token: data.data.token,
-            user: data.data.user,
-            auth: true,
-            toast: {
-              isOpen: true,
-              message: 'Account authorized',
-              type: 'success',
-            },
+  const {isLoading, refetch} = useQuery('user', () => fetchUser({...fields}), {
+    enabled: false,
+    onSuccess: (data: Response<UserResponse>) => {
+      dispatch({
+        payload: {
+          token: data.data.token,
+          user: data.data.user,
+          auth: true,
+          toast: {
+            isOpen: true,
+            message: 'Account authorized',
+            type: 'success',
           },
-          type: ActionTypes.UPDATE_ALL,
-        })
-      },
-      onError: (error: Error | AxiosError<Response<UserResponse>>) => {
-        const toast: Toast = {isOpen: true, message: '', type: 'error'}
-        if (axios.isAxiosError(error) && error?.response) {
-          toast.message = error.response.data.message
-        } else {
-          toast.message = error.message
-        }
-
-        dispatch({
-          payload: {
-            toast,
-          },
-          type: ActionTypes.UPDATE_ALL,
-        })
-      },
+        },
+        type: ActionTypes.UPDATE_ALL,
+      })
     },
-  )
+    onError: (error: Error | AxiosError<Response<UserResponse>>) => {
+      const toast: Toast = {isOpen: true, message: '', type: 'error'}
+      if (axios.isAxiosError(error) && error?.response) {
+        toast.message = error.response.data.message
+      } else {
+        toast.message = error.message
+      }
+
+      dispatch({
+        payload: {
+          toast,
+        },
+        type: ActionTypes.UPDATE_ALL,
+      })
+    },
+  })
 
   const onSubmit = () => refetch()
 
