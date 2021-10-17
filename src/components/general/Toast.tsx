@@ -8,7 +8,7 @@ const Toast = () => {
 
   const handleClose = () => {
     dispatch({
-      payload: {toast: {isOpen: false}},
+      payload: {toast: {...toast, isOpen: false}},
       type: ActionTypes.UPDATE_ALL,
     })
   }

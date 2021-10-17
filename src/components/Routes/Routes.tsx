@@ -1,29 +1,50 @@
 import {FC} from 'react'
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom'
+import {useAppContext} from 'store/context'
+import {Typography} from '@mui/material'
+
 import Home from 'components/pages/Home'
 import SignIn from 'components/pages/SignIn'
 import SignUp from 'components/pages/SignUp'
+import Profile from 'components/pages/Profile'
+import MyPosts from 'components/pages/MyPosts'
+import NewPost from 'components/pages/NewPost'
 import TopBar from 'components/general/TopBar'
 import Toast from 'components/general/Toast'
+import PublicRoute from './PublicRoute'
+import PrivateRoute from './PrivateRoute'
 
 export const Routes: FC = () => {
+  const {state} = useAppContext()
+
   return (
     <>
       <Toast />
       <Router>
         <TopBar />
         <Switch>
-          <Route exact path="/sign-in">
+          <PublicRoute auth={state.auth} exact path="/sign-in">
             <SignIn />
-          </Route>
-          <Route exact path="/sign-up">
+          </PublicRoute>
+          <PublicRoute auth={state.auth} exact path="/sign-up">
             <SignUp />
-          </Route>
+          </PublicRoute>
+          <PrivateRoute auth={state.auth} exact path="/profile">
+            <Profile />
+          </PrivateRoute>
+          <PrivateRoute auth={state.auth} exact path="/my-posts">
+            <MyPosts />
+          </PrivateRoute>
+          <PrivateRoute auth={state.auth} exact path="/new-post">
+            <NewPost />
+          </PrivateRoute>
           <Route exact path="/">
             <Home />
           </Route>
           <Route>
-            <p>Page not found</p>
+            <Typography variant="h1" component="h2" align="center">
+              Page not found
+            </Typography>
           </Route>
         </Switch>
       </Router>
