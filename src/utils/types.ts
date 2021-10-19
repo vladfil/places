@@ -29,6 +29,10 @@ export interface WpQueryResponse {
   }
 }
 
+export interface PostResponse {
+  post: Post
+}
+
 export type Post = {
   ID: number
   post_author: number

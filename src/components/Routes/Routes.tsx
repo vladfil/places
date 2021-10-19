@@ -7,6 +7,7 @@ import Home from 'components/pages/Home'
 import SignIn from 'components/pages/SignIn'
 import SignUp from 'components/pages/SignUp'
 import Posts from 'components/pages/Posts'
+import SinglePage from 'components/pages/SinglePage'
 import Profile from 'components/pages/Profile'
 import MyPosts from 'components/pages/MyPosts'
 import NewPost from 'components/pages/NewPost'
@@ -32,6 +33,9 @@ export const Routes: FC = () => {
           </PublicRoute>
           <PublicRoute auth={state.auth} exact path="/posts">
             <Posts />
+          </PublicRoute>
+          <PublicRoute auth={state.auth} exact path="/posts/:id">
+            <SinglePage />
           </PublicRoute>
           <PrivateRoute auth={state.auth} exact path="/profile">
             <Profile />
