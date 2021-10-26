@@ -31,6 +31,7 @@ export interface WpQueryResponse {
 
 export interface PostResponse {
   post: Post
+  user: User
 }
 
 export type Post = {
